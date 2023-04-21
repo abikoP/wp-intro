@@ -1,0 +1,30 @@
+version: '3.1'
+
+services:
+
+  wordpress:
+    build: ./public_html 
+    restart: always
+    ports:
+      - 8080:80
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_USER: intro-wp
+      WORDPRESS_DB_PASSWORD: intro-wp
+      WORDPRESS_DB_NAME: intro-wp 
+      WORDPRESS_TABLE_PREFIX: wp_
+      WORDPRESS_DEBUG: 1
+
+  db:
+    image: mariadb:10.5
+    restart: always
+    environment:
+      MYSQL_DATABASE: intro-wp 
+      MYSQL_USER: intro-wp
+      MYSQL_PASSWORD: intro-wp
+      MYSQL_RANDOM_ROOT_PASSWORD: '1'
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    volumes:
+      - ./db/mysql:/var/lib/mysql
+    ports:
+        - "4306:3306"
